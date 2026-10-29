@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f9fa">
+<title>Photo Check — التحقق من الصورة</title>
+<style>
+:root{color-scheme:light;--text:#202124;--muted:#5f6368;--border:#dadce0;--surface:#fff;--bg:#f8f9fa;--blue:#1a73e8;--blue-hover:#1765cc;--green:#188038;--red:#b3261e}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:Roboto,"Google Sans",Arial,"Noto Sans Arabic",sans-serif;display:flex;flex-direction:column}
+.topbar{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,56px);border-bottom:1px solid #e8eaed;background:#fff}
+.brand{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:600;letter-spacing:-.2px}
+.logo{width:30px;height:30px;display:grid;place-items:center;border:2px solid #4285f4;border-radius:9px;color:#4285f4;font-size:17px;position:relative}
+.logo:after{content:"";position:absolute;width:6px;height:6px;background:#34a853;border-radius:50%;top:-3px;right:-3px;border:2px solid #fff}
+.top-note{font-size:13px;color:var(--muted)}
+main{width:min(100% - 32px,760px);margin:clamp(32px,7vh,68px) auto 40px;flex:1}
+.card{background:var(--surface);border:1px solid #e3e5e8;border-radius:24px;padding:clamp(24px,5vw,48px);box-shadow:0 1px 2px #2021240a}
+.kicker{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin-bottom:24px}
+.kicker svg{flex-shrink:0}
+h1{font-size:clamp(26px,4.5vw,34px);font-weight:500;letter-spacing:-.7px;line-height:1.35;margin:0 0 12px}
+.intro{font-size:15px;color:var(--muted);line-height:1.9;margin:0;max-width:600px}
+.camera-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(190px,.8fr);gap:24px;margin-top:32px;align-items:start}
+.preview-wrap{min-width:0}
+.stage{position:relative;width:100%;aspect-ratio:4/3;background:#f1f3f4;border:1px solid #dadce0;border-radius:18px;overflow:hidden;display:grid;place-items:center}
+.stage video,.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.placeholder{text-align:center;padding:24px;color:#5f6368;max-width:290px}
+.camera-icon{width:58px;height:58px;margin:0 auto 15px;border-radius:18px;background:#e8f0fe;display:grid;place-items:center;color:#1967d2}
+.placeholder strong{display:block;font-size:15px;font-weight:500;color:#3c4043}
+.placeholder p{font-size:13px;line-height:1.7;margin:8px 0 0}
+.stage-badge{position:absolute;top:12px;right:12px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:8px;padding:7px 10px;font-size:11px;box-shadow:0 1px 3px #20212412}
+.side{padding:4px 0}
+.side h2{font-size:16px;font-weight:500;margin:0 0 8px}
+.side-copy{font-size:13px;line-height:1.8;color:var(--muted);margin:0 0 18px}
+.field-label{font-size:12px;font-weight:500;color:#5f6368;display:block;margin-bottom:8px}
+select{width:100%;height:44px;border:1px solid #dadce0;border-radius:10px;background:#fff;color:#202124;padding:0 12px;font:inherit;font-size:14px;outline:none}
+select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #1a73e8;outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.btn{height:44px;border-radius:999px;padding:0 19px;border:1px solid transparent;font-size:14px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:background .15s,border-color .15s;white-space:nowrap}
+.btn:disabled{opacity:.48;cursor:not-allowed}
+.primary{background:var(--blue);color:#fff}
+.primary:hover:not(:disabled){background:var(--blue-hover)}
+.outline{background:#fff;color:var(--blue);border-color:#dadce0}
+.outline:hover:not(:disabled){background:#f6fafe;border-color:#c5d7f5}
+.action-stack{display:grid;gap:10px;margin-top:16px}
+.camera-switch{background:transparent;border:0;color:var(--blue);font-size:13px;font-weight:500;padding:8px 0;text-align:right}
+.line{height:1px;background:#e8eaed;margin:24px 0}
+.consent{display:flex;align-items:flex-start;gap:12px;color:#5f6368;font-size:12px;line-height:1.8}
+.consent input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--blue);flex-shrink:0}
+.privacy{margin-top:18px;background:#f8f9fa;border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:10px;color:#5f6368;font-size:12px;line-height:1.8}
+.privacy svg{flex-shrink:0;margin-top:2px;color:#5f6368}
+.continue{width:100%;margin-top:20px;height:48px}
+.status{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.7}
+.status.show{display:block}.status.error{color:var(--red);background:#fce8e6}.status.ok{color:var(--green);background:#e6f4ea}
+footer{padding:22px 20px 26px;text-align:center;color:#70757a;font-size:12px;line-height:1.8}
+footer a{color:#5f6368;text-underline-offset:3px}
+.hidden{display:none!important}
+@media(max-width:620px){.topbar{height:58px;padding:0 18px}.top-note{display:none}main{width:min(100% - 24px,500px);margin:22px auto 28px}.card{padding:23px 19px;border-radius:20px}.camera-layout{grid-template-columns:1fr;gap:18px;margin-top:24px}.side{padding:0}.side h2{margin-bottom:5px}.side-copy{margin-bottom:14px}.stage{aspect-ratio:4/3}.action-stack{grid-template-columns:1fr 1fr}.btn{padding:0 12px;font-size:13px}.camera-switch{padding:10px 0}.line{margin:20px 0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo" aria-hidden="true">◉</span><span>Photo Check</span></div>
+  <span class="top-note">خطوة متابعة خاصة بهذا الموقع</span>
+</header>
+<main>
+<section class="card">
+  <div class="kicker">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="m8 12 2.6 2.6L16.5 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    التحقق من الصورة
+  </div>
+  <h1>التقط صورة للمتابعة</h1>
+  <p class="intro">استخدم كاميرا جهازك لالتقاط صورة. ستتمكن من مراجعتها قبل المتابعة، ولن تُرسل إلى مشغّل الموقع عبر تيليجرام إلا بعد موافقتك.</p>
+
+  <div class="camera-layout">
+    <div class="preview-wrap">
+      <div class="stage" id="stage">
+        <div class="placeholder" id="placeholder">
+          <div class="camera-icon">
+            <svg width="29" height="29" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5h3l1.5-2h7l1.5 2h3v11H4v-11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" stroke="currentColor" stroke-width="1.7"/></svg>
+          </div>
+          <strong>الكاميرا غير مفعّلة</strong>
+          <p>اضغط على «فتح الكاميرا» للسماح للمتصفح بالوصول إليها.</p>
+        </div>
+        <span class="stage-badge" id="cameraBadge">جاهز للبدء</span>
+        <video id="video" autoplay playsinline muted class="hidden"></video>
+        <img id="preview" class="hidden" alt="معاينة الصورة التي التقطتها">
+      </div>
+      <div class="action-stack">
+        <button class="btn outline" id="openBtn" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5h3l1.5-2h7l1.5 2h3v11H4v-11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" stroke="currentColor" stroke-width="1.7"/></svg>
+          فتح الكاميرا
+        </button>
+        <button class="btn primary" id="captureBtn" type="button" disabled>التقاط الصورة</button>
+      </div>
+      <button class="camera-switch" id="switchBtn" type="button">تبديل إلى الكاميرا الأمامية ↔</button>
+      <button class="btn outline hidden" id="retakeBtn" type="button" style="width:100%">إعادة التقاط الصورة</button>
+    </div>
+
+    <aside class="side">
+      <h2>إعدادات الكاميرا</h2>
+      <p class="side-copy">يمكنك اختيار الكاميرا الأمامية أو الخلفية. تأكد من أن الصورة واضحة قبل المتابعة.</p>
+      <label class="field-label" for="cameraSelect">الكاميرا المستخدمة</label>
+      <select id="cameraSelect">
+        <option value="environment">الكاميرا الخلفية</option>
+        <option value="user">الكاميرا الأمامية</option>
+      </select>
+      <div class="privacy">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-2.8 7.8-7 10-4.2-2.2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>الشفافية مهمة: هذا موقع مستقل وليس خدمة Cloudflare الرسمية. لا تجمع هذه الصفحة موقعك الجغرافي. يمكنك مراجعة الصورة قبل الموافقة على إرسالها.</span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="line"></div>
+  <label class="consent"><input id="consent" type="checkbox"><span>أوافق على إرسال الصورة التي التقطتها إلى مشغّل الموقع عبر تيليجرام. أفهم أن الصورة ستُرسل بعد موافقتي، ويمكنني عدم المتابعة إذا لم أوافق.</span></label>
+  <button class="btn primary continue" id="continueBtn" type="button" disabled>
+    تأكيد الصورة والمتابعة
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+</section>
+</main>
+<footer>Photo Check · صفحة مستقلة لالتقاط الصورة<br><a href="https://t.me/+mI8jeQjsa7RjOTZk" target="_blank" rel="noopener">رابط تيليجرام</a></footer>
+<canvas id="canvas" class="hidden"></canvas>
+<script>
+const video=document.getElementById('video'),preview=document.getElementById('preview'),placeholder=document.getElementById('placeholder');
+const cameraSelect=document.getElementById('cameraSelect'),openBtn=document.getElementById('openBtn'),captureBtn=document.getElementById('captureBtn'),retakeBtn=document.getElementById('retakeBtn'),switchBtn=document.getElementById('switchBtn'),consent=document.getElementById('consent'),continueBtn=document.getElementById('continueBtn'),statusBox=document.getElementById('status'),badge=document.getElementById('cameraBadge'),canvas=document.getElementById('canvas');
+const DESTINATION='https://t.me/+mI8jeQjsa7RjOTZk';
+let stream=null,photoBlob=null,cameraOpen=false;
+function showStatus(message,type='error'){statusBox.textContent=message;statusBox.className='status show '+type}
+function clearStatus(){statusBox.className='status'}
+function updateContinue(){continueBtn.disabled=!(photoBlob&&consent.checked)}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}video.srcObject=null;cameraOpen=false}
+async function openCamera(){
+ clearStatus();stopCamera();
+ if(!navigator.mediaDevices?.getUserMedia){showStatus('هذا المتصفح لا يدعم الكاميرا. افتح الموقع عبر HTTPS في متصفح حديث.');return}
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:cameraSelect.value},width:{ideal:1280},height:{ideal:960}},audio:false});
+  video.srcObject=stream;video.classList.remove('hidden');preview.classList.add('hidden');placeholder.classList.add('hidden');await video.play();cameraOpen=true;captureBtn.disabled=false;badge.textContent=cameraSelect.value==='user'?'الكاميرا الأمامية مفعّلة':'الكاميرا الخلفية مفعّلة';openBtn.textContent='إعادة فتح الكاميرا';retakeBtn.classList.add('hidden');photoBlob=null;updateContinue();
+ }catch(e){showStatus(e.name==='NotAllowedError'?'لم تمنح إذن الكاميرا. اسمح بالوصول من إعدادات المتصفح ثم أعد المحاولة.':'تعذّر فتح الكاميرا. تأكد من عدم استخدامها في تطبيق آخر ثم حاول مجددًا.')}
+}
+openBtn.addEventListener('click',openCamera);
+cameraSelect.addEventListener('change',()=>{if(cameraOpen)openCamera();switchBtn.textContent=cameraSelect.value==='user'?'تبديل إلى الكاميرا الخلفية ↔':'تبديل إلى الكاميرا الأمامية ↔'});
+switchBtn.addEventListener('click',()=>{cameraSelect.value=cameraSelect.value==='user'?'environment':'user';switchBtn.textContent=cameraSelect.value==='user'?'تبديل إلى الكاميرا الخلفية ↔':'تبديل إلى الكاميرا الأمامية ↔';if(cameraOpen)openCamera()});
+captureBtn.addEventListener('click',()=>{
+ clearStatus();if(!cameraOpen||!video.videoWidth){showStatus('افتح الكاميرا أولًا.');return}
+ canvas.width=video.videoWidth;canvas.height=video.videoHeight;canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+ canvas.toBlob(blob=>{if(!blob){showStatus('تعذّر تجهيز الصورة. حاول مرة أخرى.');return}photoBlob=blob;preview.src=URL.createObjectURL(blob);preview.classList.remove('hidden');video.classList.add('hidden');placeholder.classList.add('hidden');badge.textContent='تم التقاط الصورة';stopCamera();captureBtn.disabled=true;retakeBtn.classList.remove('hidden');updateContinue()},'image/jpeg',.92)
+});
+retakeBtn.addEventListener('click',()=>{photoBlob=null;preview.classList.add('hidden');placeholder.classList.remove('hidden');badge.textContent='جاهز للبدء';captureBtn.disabled=true;retakeBtn.classList.add('hidden');updateContinue();openCamera()});
+consent.addEventListener('change',updateContinue);
+continueBtn.addEventListener('click',async()=>{
+ clearStatus();if(!photoBlob){showStatus('يجب التقاط صورة أولًا.');return}if(!consent.checked){showStatus('يرجى الموافقة على إرسال الصورة قبل المتابعة.');return}
+ continueBtn.disabled=true;continueBtn.textContent='جارٍ إرسال الصورة…';
+ try{
+  const form=new FormData();form.append('photo',photoBlob,'photo-check.jpg');form.append('consent','yes');
+  const res=await fetch('/api/send',{method:'POST',body:form});const data=await res.json().catch(()=>({}));
+  if(!res.ok||!data.ok)throw new Error(data.error||'تعذّر إرسال الصورة. تحقق من إعدادات الخادم ثم حاول مجددًا.');
+  showStatus('تم إرسال الصورة بنجاح. سيتم فتح الوجهة الآن.','ok');setTimeout(()=>{window.location.href=DESTINATION},800);
+ }catch(e){showStatus(e.message||'تعذّر الإرسال. تحقق من الاتصال ثم حاول مجددًا.');continueBtn.disabled=false;continueBtn.innerHTML='تأكيد الصورة والمتابعة <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+});
+window.addEventListener('pagehide',stopCamera);
+</script>
+</body></html>
