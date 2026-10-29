@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6821f">
+<title>التحقق بالكاميرا</title>
+<style>
+:root{color-scheme:light;--orange:#f6821f;--ink:#202938;--muted:#657184;--line:#e2e7ee;--bg:#f4f7fb}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 0%,#fff 0,#f4f7fb 48%,#edf2f8 100%);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;color:var(--ink);display:flex;justify-content:center;padding:22px 14px}
+.wrap{width:min(100%,520px);margin:auto}
+.brand{display:flex;align-items:center;gap:10px;margin:0 0 15px;padding:0 4px;color:#354154;font-size:14px;font-weight:750}
+.brandmark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#ffb45d,var(--orange));display:grid;place-items:center;color:white;box-shadow:0 5px 14px #f6821f40}
+.card{background:#fff;border:1px solid #e4e9f0;border-radius:24px;padding:clamp(18px,5vw,28px);box-shadow:0 18px 60px #24344b12}
+h1{font-size:clamp(22px,5vw,28px);letter-spacing:-.5px;margin:0 0 8px}
+.sub{color:var(--muted);line-height:1.8;margin:0 0 20px;font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #f5d4b4;background:#fff8f1;color:#a84c06;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:750;margin-bottom:14px}
+.dot{width:7px;height:7px;border-radius:50%;background:#f6821f;box-shadow:0 0 0 4px #f6821f1a}
+.animation{position:relative;overflow:hidden;border:1px solid #e6ebf2;border-radius:20px;background:linear-gradient(145deg,#f8fafc,#eef3f8);min-height:190px;display:grid;place-items:center;margin:18px 0}
+.orbit{position:absolute;width:160px;height:160px;border:1px dashed #f6821f66;border-radius:50%;animation:spin 16s linear infinite}
+.orbit:before,.orbit:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.orbit:before{top:14px;left:25px}.orbit:after{bottom:22px;right:10px}
+.hand{font-size:82px;filter:drop-shadow(0 8px 4px #27384a18);z-index:1;animation:float 2.1s ease-in-out infinite;transform-origin:50% 70%}
+.scan{position:absolute;z-index:2;left:14%;right:14%;height:2px;background:linear-gradient(90deg,transparent,#f6821f,transparent);box-shadow:0 0 14px #f6821f88;animation:scan 2.8s ease-in-out infinite}
+.corner{position:absolute;width:23px;height:23px;border-color:var(--orange);border-style:solid;opacity:.9}
+.tl{top:22px;left:22px;border-width:3px 0 0 3px;border-radius:7px 0 0}
+.tr{top:22px;right:22px;border-width:3px 3px 0 0;border-radius:0 7px 0 0}
+.bl{bottom:22px;left:22px;border-width:0 0 3px 3px;border-radius:0 0 0 7px}
+.br{bottom:22px;right:22px;border-width:0 3px 3px 0;border-radius:0 0 7px 0}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes float{0%,100%{transform:translateY(3px) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}@keyframes scan{0%,100%{top:30% ;opacity:.3}50%{top:72%;opacity:1}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0 20px}
+.step{border:1px solid var(--line);border-radius:14px;padding:11px 8px;text-align:center;background:#fff;min-width:0}
+.step .ico{font-size:23px;display:block;margin-bottom:5px}.step b{font-size:12px;display:block}.step small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:4px}
+.actions{display:flex;flex-wrap:wrap;gap:9px}
+button{border:0;border-radius:13px;padding:14px 16px;font:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:transform .15s,opacity .15s;flex:1;min-width:135px}
+button:active{transform:scale(.985)}button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:var(--orange);color:#fff;box-shadow:0 7px 18px #f6821f33}.secondary{background:#f0f3f7;color:#354154}
+video,img{display:block;width:100%;max-height:48vh;object-fit:contain;background:#151b26;border-radius:16px;margin:14px 0}
+.hidden{display:none!important}
+.consent{display:flex;gap:10px;align-items:flex-start;margin:15px 0;padding:12px;border:1px solid var(--line);border-radius:14px;color:#49566a;font-size:12px;line-height:1.8}
+.consent input{margin-top:5px;accent-color:var(--orange);width:17px;height:17px;flex-shrink:0}
+.status{min-height:25px;color:#526176;font-size:13px;line-height:1.7;margin:12px 0 0}
+.status.error{color:#b42318}.status.success{color:#137547}
+.privacy{margin-top:17px;padding-top:14px;border-top:1px solid #edf0f4;font-size:11px;color:#778397;line-height:1.9}
+.done{padding:30px 8px;text-align:center}.check{width:65px;height:65px;border-radius:50%;display:grid;place-items:center;background:#e5f8ed;color:#13834b;font-size:32px;margin:0 auto 15px;animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand"><span class="brandmark">✓</span><span>التحقق بالكاميرا <span style="font-weight:500;color:#7b8798">· تجربة توضيحية</span></span></div>
+  <section class="card" id="main">
+    <div class="pill"><span class="dot"></span> تحقق تفاعلي</div>
+    <h1>أكمل الخطوات للمتابعة</h1>
+    <p class="sub">اتبع الحركة التوضيحية ثم التقط صورة بنفسك. ستتمكن من معاينتها، ولن تُرسل إلا بعد موافقتك الصريحة.</p>
+    <div class="animation" aria-label="رسم توضيحي متحرك لطريقة إظهار الإبهام">
+      <span class="orbit"></span><span class="scan"></span>
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="hand" aria-hidden="true">👍</div>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="ico">✋</span><b>1. جهّز يدك</b><small>اجعل اليد واضحة</small></div>
+      <div class="step"><span class="ico">👍</span><b>2. ارفع الإبهام</b><small>أبقِ اليد داخل الإطار</small></div>
+      <div class="step"><span class="ico">📷</span><b>3. التقط وراجع</b><small>أعد التصوير إن أردت</small></div>
+    </div>
+    <button class="primary" id="open">فتح الكاميرا</button>
+    <video id="video" class="hidden" autoplay playsinline muted></video>
+    <canvas id="canvas" class="hidden"></canvas>
+    <button class="primary hidden" id="snap">التقاط الصورة</button>
+    <img id="photo" class="hidden" alt="معاينة الصورة التي التقطها المستخدم">
+    <div class="actions">
+      <button class="secondary hidden" id="again">إعادة التصوير</button>
+    </div>
+    <label class="consent hidden" id="consentBox"><input id="consent" type="checkbox"><span>أوافق على إرسال الصورة التي التقطتها والبيانات الوصفية المتاحة فيها (إن وجدت) إلى مشغّل هذا الموقع عبر Telegram. أفهم أن البيانات قد تتضمن معلومات موقع إذا كانت موجودة داخل الصورة.</span></label>
+    <button class="primary hidden" id="send">موافقة وإرسال الصورة</button>
+    <p class="status" id="status" role="status" aria-live="polite">اضغط «فتح الكاميرا» للبدء.</p>
+    <div class="privacy">الشفافية: هذه تجربة تصوير يدوية وليست خدمة Cloudflare ولا تتحقق من الهوية تلقائيًا. لا تعمل الكاميرا إلا بعد منح الإذن. لا تُرسل الصورة تلقائيًا؛ يجب التقاطها والموافقة على إرسالها. استخدمها فقط مع صورك أو بموافقة صاحب الصورة.</div>
+  </section>
+  <section class="card hidden done" id="done">
+    <div class="check">✓</div><h1>تم إرسال الطلب</h1><p class="sub">أكد الخادم نجاح إرسال الصورة إلى Telegram.</p><button class="secondary" id="return">العودة للبداية</button>
+  </section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+let stream=null,blob=null,photoUrl=null;
+function status(text,kind=""){const el=$("#status");el.textContent=text;el.className="status "+kind}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$("#video").srcObject=null;$("#video").classList.add("hidden");$("#snap").classList.add("hidden");$("#open").classList.remove("hidden")}
+function clearPhoto(){blob=null;if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=null;$("#photo").removeAttribute("src");$("#photo").classList.add("hidden");$("#consentBox").classList.add("hidden");$("#consent").checked=false;$("#send").classList.add("hidden");$("#again").classList.add("hidden")}
+$("#open").addEventListener("click",async()=>{try{if(!navigator.mediaDevices?.getUserMedia)throw new Error("المتصفح لا يدعم الكاميرا أو أن الصفحة ليست عبر HTTPS.");stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});$("#video").srcObject=stream;$("#video").classList.remove("hidden");$("#snap").classList.remove("hidden");$("#open").classList.add("hidden");status("ضع يدك في الإطار وارفع الإبهام ثم التقط الصورة.")}catch(e){status("تعذر فتح الكاميرا: "+e.message,"error")}});
+$("#snap").addEventListener("click",()=>{const v=$("#video");if(!v.videoWidth)return status("انتظر حتى تظهر صورة الكاميرا.","error");const c=$("#canvas");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);c.toBlob(b=>{if(!b)return status("تعذر التقاط الصورة.","error");clearPhoto();blob=b;photoUrl=URL.createObjectURL(b);$("#photo").src=photoUrl;$("#photo").classList.remove("hidden");stopCamera();$("#again").classList.remove("hidden");$("#consentBox").classList.remove("hidden");$("#send").classList.remove("hidden");status("راجع الصورة. إذا وافقت على الإرسال، ضع علامة الموافقة ثم اضغط الزر.")},"image/jpeg",.92)});
+$("#again").addEventListener("click",()=>{clearPhoto();status("يمكنك فتح الكاميرا والتقاط صورة جديدة.")});
+$("#send").addEventListener("click",async()=>{if(!blob)return status("التقط صورة أولًا.","error");if(!$("#consent").checked)return status("يرجى الموافقة الصريحة قبل الإرسال.","error");const btn=$("#send");btn.disabled=true;status("جارٍ إرسال الصورة وقراءة البيانات المتاحة…");try{const base64=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(",")[1]);r.onerror=reject;r.readAsDataURL(blob)});const res=await fetch("/api/send",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:base64,consent:true})});let data={};try{data=await res.json()}catch{}if(!res.ok)throw new Error(data.error||"تعذر الإرسال");$("#main").classList.add("hidden");$("#done").classList.remove("hidden")}catch(e){status("لم يتم الإرسال: "+e.message,"error")}finally{btn.disabled=false}});
+$("#return").addEventListener("click",()=>{$("#done").classList.add("hidden");$("#main").classList.remove("hidden");clearPhoto();status("اضغط «فتح الكاميرا» للبدء.")});
+window.addEventListener("pagehide",stopCamera);
+</script>
+</body>
+</html>
