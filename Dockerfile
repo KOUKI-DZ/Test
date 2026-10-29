@@ -4,6 +4,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY server.js ./server.js
-COPY public ./public
+COPY index.html ./public/index.html
 ENV NODE_ENV=production
 CMD ["node", "server.js"]
